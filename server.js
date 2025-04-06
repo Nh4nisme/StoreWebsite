@@ -1,45 +1,37 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const session = require('express-session');
-const bodyParser = require('body-parser');
 const path = require('path');
-
-const authRoutes = require('./routes/authRoutes');
-
 const app = express();
+const accountRoutes = require('./routes/account.route');
+const homeRoutes = require('./routes/home.route');
 
-// Middleware
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.use(session({
-    secret: process.env.SESSION_SECRET || 'secret',
-    resave: false,
-    saveUninitialized: false
-}));
-
-// MongoDB connection
+// Kết nối MongoDB Atlas
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
-}).then(() => console.log('✅ MongoDB connected'))
-  .catch(err => console.error('❌ MongoDB error:', err));
+}).then(() => {
+    console.log("✅ MongoDB connected");
+}).catch(err => {
+    console.error("❌ MongoDB connection error:", err);
+});
+
+// Middleware
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+// Public static files (login.html, etc.)
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'html', 'login.html'));
+});
 
 // Routes
-app.use('/', authRoutes);
+app.use(accountRoutes);
+// app.use(homeRoutes);
 
-// Route đến login.html
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'login.html'));
-});
-
-// Route đến home.html sau khi login
-app.get('/home', (req, res) => {
-    if (!req.session.user) return res.redirect('/');
-    res.sendFile(path.join(__dirname, 'public', 'home.html'));
-});
-
+// Server start
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`🚀 Server running: http://localhost:${PORT}`);
