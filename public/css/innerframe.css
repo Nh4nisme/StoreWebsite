@@ -1,0 +1,86 @@
+.search-box {
+    border-radius: 20px;
+    background-color: rgb(208, 208, 208);
+    padding: 5px 10px;
+    margin-right: 10px;
+    width: 200px;
+    border: none;
+}
+
+.general-btn {
+    background-color: rgb(67, 141, 184);
+    border-radius: 20px;
+    padding: 5px 15px;
+    margin-left: 10px;
+    color: white;
+    border: none;
+    transition: ease-out 0.3s transform;
+}
+
+.general-btn:hover {
+    background-color: rgb(55, 112, 145);
+    transform: scale(1.2);
+}
+
+.general-btn-big {
+    background-color: rgb(67, 141, 184);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    padding: 5px 30px;
+    color: white;
+    font-size: 30px;
+    font-weight: bolder;
+    border: none;
+    transition: ease-out 0.3s transform;
+}
+
+.general-btn-big:hover {
+    background-color: rgb(55, 112, 145);
+    transform: scale(1.05);
+}
+
+.category-btn {
+    background-color: transparent;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 14px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    cursor: pointer;
+    white-space: nowrap;
+    display: inline-block;
+    transition: ease-out 0.3s transform;
+}
+  
+.category-btn:hover,
+.category-btn:active {
+    background-color: rgb(208, 208, 208);
+    transform: scale(1.2);
+}
+
+.table-invoice tr td {
+    background-color: rgb(240, 240, 240);
+}
+
+.table th, .table td {
+    padding: 10px;
+    text-align: left;
+    border: none;
+}
+
+.table-header th {
+    background-color: rgb(190, 190, 190);
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.general-icon {
+    margin: 0 5px;
+    transition: ease-out 0.3s transform;
+}
+
+.general-icon:hover {
+    cursor: pointer;
+    transform: scale(1.2);
+}
