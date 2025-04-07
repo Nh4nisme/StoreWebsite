@@ -38,7 +38,7 @@ $(document).ready(function () {
             });
     }
 
-    loadHTML('dashboard-content', 'dashboard.html');
+    // loadHTML('dashboard-content', 'dashboard.html');
     loadHTML('products-content', 'products.html');
     loadHTML('orders-content', 'orders.html');
     loadHTML('accounts-content', 'accounts.html');
