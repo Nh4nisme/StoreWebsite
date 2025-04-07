@@ -7,13 +7,14 @@
     <title>Homepage</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../css/home.css">
+    <link rel="stylesheet" href="../css/innerframe.css">
 </head>
 
 <body>
-    <div class="container-fluid p-0">
-        <div class="row g-0">
+    <div class="container-fluid">
+        <div class="row">
             <!-- Sidebar -->
-            <div class="sidebar">
+            <div class="sidebar col-2 p-0">
                 <div class="logo">
                     <img src="../img/logo.svg" alt="" id="img-logo">
                 </div>
@@ -25,7 +26,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" data-content="products" data-title="Products">
+                        <a class="nav-link" href="products.html" data-content="products" data-title="Products">
                             <i class="nav-icon bi bi-box-seam"></i>
                             Products
                         </a>
@@ -52,13 +53,13 @@
             </div>
 
             <!-- Main Content -->
-            <div class="content">
+            <div class="content col-10">
                 <!-- Phần tiêu đề thay đổi theo từng thẻ li -->
-                <div class="row mb-4">
-                    <div class="col-md-8">
+                <div class="row">
+                    <div class="col-9">
                         <h1 class="page-title">Dashboard</h1>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-3">
                         <div class="employee-box">
                             <div class="employee-icon">
                                 <i class="bi bi-person"></i>
@@ -78,7 +79,7 @@
 
                 <!-- Products Content -->
                 <div class="content-section" id="products-content" style="display: none;">
-                    <!-- Thêm nội dung phần Products vào đây -->
+                    >
                 </div>
 
                 <!-- Orders Content -->
