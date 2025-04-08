@@ -1,23 +1,39 @@
 const Account = require('../models/account.model');
 
-exports.login = async (req, res) => {
-    const { username, password } = req.body;
-    console.log('Username:', username);
-    console.log('Password:', password);
+exports.createAccount = async (req, res) => {
+    console.log("Request body:", req.body); 
+    const { username, password, employeeId, role } = req.body;
+
+    if (!username || !password || !employeeId || !role) {
+        return res.status(400).json({ message: 'All fields are required.' });
+    }
 
     try {
-        const user = await Account.findOne({ username, password });
-        console.log('Kết quả truy vấn:', user);
+        const newAccount = new Account({
+            username,
+            password,
+            employeeId,
+            role,
+        });
 
-        if (user) {
-            return res.redirect('/html/home.html');
-        } else {
-            return res.status(401).send('Invalid username or password');
-        }
-    } catch (err) {
-        console.error('Lỗi truy vấn:', err);
-        return res.status(500).send('Server error');
+        const savedAccount = await newAccount.save();
+
+        res.status(201).json({
+            message: 'Account created successfully.',
+            account: savedAccount,
+        });
+    } catch (error) {
+        console.error('Error creating account:', error);
+        res.status(500).json({ message: 'An error occurred while creating the account.' });
     }
 };
 
-
+exports.getAccounts = async (req, res) => {
+    try {
+        const accounts = await Account.find(); 
+        res.status(200).json(accounts);
+    } catch (error) {
+        console.error('Error fetching accounts:', error);
+        res.status(500).json({ message: 'An error occurred while fetching accounts.' });
+    }
+};

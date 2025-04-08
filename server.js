@@ -3,10 +3,13 @@ const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
 const app = express();
+
+const signinRoutes = require('./routes/signin.route');
 const accountRoutes = require('./routes/account.route');
 const homeRoutes = require('./routes/home.route');
+const productRoutes = require('./routes/product.route')
 
-// Kết nối MongoDB Atlas
+// Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -20,18 +23,19 @@ mongoose.connect(process.env.MONGO_URI, {
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Public static files (login.html, etc.)
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Default route for login page
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'html', 'login.html'));
 });
 
-// Routes
-app.use(accountRoutes);
-// app.use(homeRoutes);
+app.use(signinRoutes); // Handles /signin
+app.use('/api', accountRoutes); // Handles /api/accounts
+app.use('/api', productRoutes);
+app.use(homeRoutes); // Handles /home
 
-// Server start
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`🚀 Server running: http://localhost:${PORT}`);
