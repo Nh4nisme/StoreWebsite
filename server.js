@@ -10,10 +10,8 @@ const homeRoutes = require('./routes/home.route');
 const productRoutes = require('./routes/product.route')
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(() => {
+mongoose.connect(process.env.MONGO_URI, {})
+.then(() => {
     console.log("MongoDB connected");
 }).catch(err => {
     console.error("MongoDB connection error:", err);
@@ -38,5 +36,5 @@ app.use(homeRoutes); // Handles /home
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`🚀 Server running: http://localhost:${PORT}`);
+    console.log(`Server running: http://localhost:${PORT}`);
 });

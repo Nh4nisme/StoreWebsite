@@ -1,5 +1,6 @@
 const Product = require('../models/products.model');
 
+//tao san pham
 exports.createProducts = async (req, res) => {
     console.log("Request body:", req.body);
     const { productId, name, category, price, stock, supplier, expirationDate } = req.body;
@@ -30,6 +31,60 @@ exports.createProducts = async (req, res) => {
     }
 }
 
+// Get a single product by ID
+exports.getProductById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const product = await Product.findById(id); // hoặc phương thức tương đương
+
+        if (!product) {
+            return res.status(404).json({ message: "Product not found" });
+        }
+
+        res.json(product);
+    } catch (error) {
+        console.error(error); // 👈 giúp debug
+        res.status(500).json({ message: "An error occurred while fetching the product." });
+    }
+};
+
+
+//cap nhat san pham
+exports.updateProducts = async (req, res) => {
+    const { productId, name, category, price, stock, supplier, expirationDate } = req.body;
+
+    if (!productId || !name || !category || !price || !stock || !supplier || !expirationDate) {
+        return res.status(400).json({ message: 'All fields are required.' });
+    }
+
+    try {
+        const updatedProduct = await Product.findByIdAndUpdate(
+            req.params.id, // lấy từ URL /api/products/:id
+            {
+                productId,
+                name,
+                category,
+                price: parseFloat(price),
+                stock: parseInt(stock),
+                supplier,
+                expirationDate
+            },
+            { new: true, runValidators: true }
+        );
+
+        if (!updatedProduct) {
+            return res.status(404).json({ message: 'Khong tim thay san pham.' });
+        }
+
+        res.status(200).json({
+            message: 'Product updated successfully.',
+            product: updatedProduct
+        });
+    } catch (error) {
+        console.error('Loi khi cap nhat san pham:', error);
+        res.status(500).json({ message: 'An error occurred while updating the product.' });
+    }
+};
 
 // lay danh sach san pham
 exports.getProducts = async (req, res) => {
