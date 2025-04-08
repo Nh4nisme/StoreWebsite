@@ -99,6 +99,63 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="modalAccountEdit" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit Account</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3 row">
+                                <label for="editEmployeeId" class="col-4 col-form-label fw-bold">Employee ID:</label>
+                                <div class="col-8">
+                                    <input type="text" class="form-control" id="editEmployeeId">
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="editUsername" class="col-4 col-form-label fw-bold">Username:</label>
+                                <div class="col-8">
+                                    <input type="text" class="form-control" id="editUsername">
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="editPassword" class="col-4 col-form-label fw-bold">Password:</label>
+                                <div class="col-8">
+                                    <input type="password" class="form-control" id="editPassword">
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="editRole" class="col-4 col-form-label fw-bold">Role:</label>
+                                <div class="col-8">
+                                    <select class="form-select" id="editRole">
+                                        <option value="cashier">Cashier</option>
+                                        <option value="store-manager">Store Manager</option>
+                                        <option value="sales-associate">Sales Associate</option>
+                                        <option value="operations-manager">Operations Manager</option>
+                                        <option value="inventory-coordinator">Inventory Coordinator</option>
+                                        <option value="administrator">Administrator</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="saveEditBtn">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="toastMessage" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body"></div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
     </body>
     <script src="../lib/bootstrap.bundle.js"></script>
 </html>

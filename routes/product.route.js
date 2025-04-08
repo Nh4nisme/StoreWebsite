@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const productController = require('../controllers/product.controller');
 
-router.get('/products', productController.getProducts);
+router.get('/products', productController.getProducts); //lay danh sach
+router.post('/products', productController.createProducts); //tao san pham
 
 module.exports = router;
