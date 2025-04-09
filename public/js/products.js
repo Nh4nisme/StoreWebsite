@@ -92,6 +92,9 @@ function renderOnboard(products) {
       <td>${product.name}</td>
       <td>${product.price}</td>
       <td>${product.stock}</td>
+      <td class="d-flex align-items-center">
+        <input type="number" class="form-control form-control-sm mx-2 quantity-input" data-id="${product._id}" value="1" min="1" style="width: 60px; text-align: center;">
+      </td>
     `;
         tableBody.appendChild(row);
     });
@@ -210,16 +213,16 @@ function deleteProducts(productId) {
         return;
     }
     fetch(`http://localhost:3000/api/products/${productId}`, {
-        method : 'DELETE',
+        method: 'DELETE',
     })
-    .then(response => {
-        if(response.ok) {
-            fetchAndRenderProducts();
-            alert('Delete product successfully!');
-        } else {
-            alert('fail to delete');
-        }
-    });
+        .then(response => {
+            if (response.ok) {
+                fetchAndRenderProducts();
+                alert('Delete product successfully!');
+            } else {
+                alert('fail to delete');
+            }
+        });
 }
 
 // search sản phẩm (theo mã code của Tâm và sửa lại phù hợp với products)
@@ -254,8 +257,8 @@ function searchProduct() {
 //cap nhat so luong tong san pham dua(lấy theo source code của tâm nhưng sửa lại cho product)
 function updateProductCount(numbers) {
     const productNumber = document.getElementById('productCount');
-    if(productNumber) {
-       productNumber.textContent = numbers; 
+    if (productNumber) {
+        productNumber.textContent = numbers;
     }
 }
 
