@@ -19,51 +19,6 @@ async function fetchAndRenderProducts() {
     }
 }
 
-//edit san pham
-function showEditModalProducts(productId) {
-    fetch(`http://localhost:3000/api/products/${productId}`)
-        .then(response => response.json())
-        .then(product => {
-            document.getElementById("editProductId").value = product.productId;
-            document.getElementById("editName").value = product.name;
-            document.getElementById("editCategory").value = product.category;
-            document.getElementById("editPrice").value = product.price;
-            document.getElementById('editStock').value = product.stock;
-            document.getElementById('editSupplier').value = product.supplier;
-            document.getElementById('editExpirationDate').value = product.expirationDate;
-            const editModal = new bootstrap.Modal(document.getElementById('modalProductsEdit'));
-            editModal.show();
-            document.getElementById("saveEditBtn").onclick = () => saveEditedProduct(productId);
-        });
-}
-
-function saveEditedProduct(productId) {
-    const editProductId = document.getElementById("editProductId").value.trim();
-    const name = document.getElementById("editName").value.trim();
-    const category = document.getElementById("editCategory").value.trim();
-    const price = parseFloat(document.getElementById("editPrice").value.trim());
-    const stock = parseInt(document.getElementById('editStock').value.trim());
-    const supplier = document.getElementById('editSupplier').value.trim();
-    const expirationDate = document.getElementById('editExpirationDate').value.trim();
-    if (!editProductId || !name || !category || isNaN(price) || isNaN(stock) || !supplier || !expirationDate) {
-        return alert("All fields are required!");
-    }
-    fetch(`http://localhost:3000/api/products/${productId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productId : editProductId, name, category, price, stock, supplier, expirationDate }),
-    }).then(response => {
-        if (response.ok) {
-            const editModal = bootstrap.Modal.getInstance(document.getElementById("modalProductsEdit"));
-            editModal.hide();
-            fetchAndRenderProducts();
-            alert('update success!');
-        } else {
-            alert("Failed to update product.");
-        }
-    });
-}
-
 //Hien thi san pham
 function renderTable(products) {
     const tableBody = document.getElementById('tableBodyProducts');
@@ -93,9 +48,10 @@ function renderTable(products) {
     document.querySelectorAll(".btn-delete-product").forEach(button => {
         button.addEventListener("click", event => {
             const productId = event.target.closest(".btn-delete-product").dataset.id;
-            deleteAccount(productId);
+            deleteProducts(productId);
         });
     });
+    updateProductCount(products.length);
 }
 
 //Hien thi danh muc
@@ -203,5 +159,104 @@ function addProduct() {
         });
 }
 
+//edit san pham
+function showEditModalProducts(productId) {
+    fetch(`http://localhost:3000/api/products/${productId}`)
+        .then(response => response.json())
+        .then(product => {
+            document.getElementById("editProductId").value = product.productId;
+            document.getElementById("editName").value = product.name;
+            document.getElementById("editCategory").value = product.category;
+            document.getElementById("editPrice").value = product.price;
+            document.getElementById('editStock').value = product.stock;
+            document.getElementById('editSupplier').value = product.supplier;
+            document.getElementById('editExpirationDate').value = product.expirationDate;
+            const editModal = new bootstrap.Modal(document.getElementById('modalProductsEdit'));
+            editModal.show();
+            document.getElementById("saveEditBtn").onclick = () => saveEditedProduct(productId);
+        });
+}
+
+function saveEditedProduct(productId) {
+    const editProductId = document.getElementById("editProductId").value.trim();
+    const name = document.getElementById("editName").value.trim();
+    const category = document.getElementById("editCategory").value.trim();
+    const price = parseFloat(document.getElementById("editPrice").value.trim());
+    const stock = parseInt(document.getElementById('editStock').value.trim());
+    const supplier = document.getElementById('editSupplier').value.trim();
+    const expirationDate = document.getElementById('editExpirationDate').value.trim();
+    if (!editProductId || !name || !category || isNaN(price) || isNaN(stock) || !supplier || !expirationDate) {
+        return alert("All fields are required!");
+    }
+    fetch(`http://localhost:3000/api/products/${productId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productId: editProductId, name, category, price, stock, supplier, expirationDate }),
+    }).then(response => {
+        if (response.ok) {
+            const editModal = bootstrap.Modal.getInstance(document.getElementById("modalProductsEdit"));
+            editModal.hide();
+            fetchAndRenderProducts();
+            alert('update success!');
+        } else {
+            alert("Failed to update product.");
+        }
+    });
+}
+
+//xoa san pham
+function deleteProducts(productId) {
+    if (!confirm(`Are you sure you want to delete this account? ${productId}`)) {
+        return;
+    }
+    fetch(`http://localhost:3000/api/products/${productId}`, {
+        method : 'DELETE',
+    })
+    .then(response => {
+        if(response.ok) {
+            fetchAndRenderProducts();
+            alert('Delete product successfully!');
+        } else {
+            alert('fail to delete');
+        }
+    });
+}
+
+// search sản phẩm (theo mã code của Tâm và sửa lại phù hợp với products)
+function searchProduct() {
+    const searchTerm = document.getElementById("searchProductText").value.toLowerCase().trim();
+    const tableRows = document.querySelectorAll("#tableBodyProducts tr");
+
+    // Hiển thị lại tất cả các dòng trước khi tìm
+    tableRows.forEach(row => {
+        row.style.display = "";
+    });
+
+    // Nếu không nhập gì thì thoát
+    if (searchTerm === "") return;
+
+    tableRows.forEach(row => {
+        const productId = row.cells[1].textContent.toLowerCase();
+        const name = row.cells[2].textContent.toLowerCase();
+        const dateExp = row.cells[3].textContent.toLowerCase();
+        const stock = row.cells[4].textContent.toLowerCase();
+
+        const matchesSearch =
+            productId.includes(searchTerm) ||
+            name.includes(searchTerm) ||
+            dateExp.includes(searchTerm) ||
+            stock.includes(searchTerm);
+
+        row.style.display = matchesSearch ? "" : "none";
+    });
+}
+
+//cap nhat so luong tong san pham dua(lấy theo source code của tâm nhưng sửa lại cho product)
+function updateProductCount(numbers) {
+    const productNumber = document.getElementById('productCount');
+    if(productNumber) {
+       productNumber.textContent = numbers; 
+    }
+}
 
 

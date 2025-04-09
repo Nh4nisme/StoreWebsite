@@ -18,12 +18,12 @@
                     <div style="position: relative; display: inline-block;">
                         <img src="../img/search.svg" alt="Search"
                             style="position: absolute; top: 50%; left: 20px; transform: translateY(-50%); width: 16px; height: 16px;">
-                        <input type="search" class="search-box ms-2" placeholder="Search"
+                        <input type="search" id="searchProductText" class="search-box ms-2" placeholder="Search"
                             style="padding-left: 32px; width: 180px;">
                     </div>
+                    <button class="general-btn" onclick="searchProduct()">Search Product</button>
                     <button class="general-btn" data-bs-toggle="modal" data-bs-target="#modalProducts">Add
                         Products</button>
-                    <button class="general-btn">Remove</button>
                     <!-- modal product -->
                     <div class="modal fade" id="modalProducts" tabindex="-1" data-bs-backdrop="static"
                         data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
@@ -106,7 +106,7 @@
 
                     <!-- modal edit product -->
                     <div class="modal fade" id="modalProductsEdit" tabindex="-1" data-bs-backdrop="static"
-                    data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+                        data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-md">
                             <div class="modal-content">
                                 <div class="modal-header">

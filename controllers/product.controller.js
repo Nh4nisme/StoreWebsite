@@ -34,8 +34,7 @@ exports.createProducts = async (req, res) => {
 // Get a single product by ID
 exports.getProductById = async (req, res) => {
     try {
-        const id = req.params.id;
-        const product = await Product.findById(id); // hoặc phương thức tương đương
+        const product = await Product.findById(req.params.id);
 
         if (!product) {
             return res.status(404).json({ message: "Product not found" });
@@ -43,7 +42,7 @@ exports.getProductById = async (req, res) => {
 
         res.json(product);
     } catch (error) {
-        console.error(error); // 👈 giúp debug
+        console.error(error);
         res.status(500).json({ message: "An error occurred while fetching the product." });
     }
 };
@@ -85,6 +84,21 @@ exports.updateProducts = async (req, res) => {
         res.status(500).json({ message: 'An error occurred while updating the product.' });
     }
 };
+
+//Xoa san pham
+exports.deleteProducts = async (req, res) => {
+    try {
+        const deletedProduct = await Product.findByIdAndDelete(req.params.id);    
+        if (!deletedProduct) {
+            return res.status(404).json({ message: 'Product not found.'});
+        }
+        res.status(200).json({ message: 'Product deleted successfully.' });
+    } catch (error) {
+        console.error('Error deleting product:', error);
+        res.status(500).json({ message: 'An error occurred while deleting the product.' });
+    }
+};
+
 
 // lay danh sach san pham
 exports.getProducts = async (req, res) => {
