@@ -1,4 +1,3 @@
-// search sản phẩm (theo mã code của Tâm và sửa lại phù hợp với products)
 function searchOnboard() {
     const searchTerm = document.getElementById("searchOnboardText").value.toLowerCase().trim();
     const tableRows = document.querySelectorAll("#tableBodyOnboard tr");
