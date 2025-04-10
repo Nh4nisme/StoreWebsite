@@ -124,7 +124,7 @@ exports.getRevenueMonthly = async (req, res) => {
             {
                 $sort: { month: 1 }
             }
-        ]); 
+        ]);
         res.status(200).json(result);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -145,10 +145,47 @@ exports.getTopProducts = async (req, res) => {
             { $sort: { totalQuantity: -1 } },
             { $limit: 3 }
         ]);
-        
+
         res.status(200).json(topProducts);
     } catch (error) {
         console.error('Error getting top products:', error);
         res.status(500).json({ message: 'An error occurred while getting top products.' });
     }
-};
+}
+
+exports.getTopEmployees = async (req, res) => {
+    try {
+        const topEmployees = await Order.aggregate([
+            {
+                $group: {
+                  _id: "$employeeId",
+                  totalSales: { $sum: "$totalAmount" }
+                }
+              },
+              {
+                $lookup: {
+                  from: "NhanVien",
+                  localField: "_id",
+                  foreignField: "employeeId",
+                  as: "employeeDetails"
+                }
+              },
+              {
+                $unwind: "$employeeDetails"
+              },
+              {
+                $project: {
+                  totalSales: 1,
+                  employeeName: "$employeeDetails.name"
+                }
+              },
+              {
+                $sort: { totalSales: -1 }
+              }
+        ]);
+        res.status(200).json(topEmployees);
+    } catch (error) {
+        console.error('Error getting top employees:', error);
+        res.status(500).json({ message: 'An error occurred while getting top employees.' });
+    }
+}

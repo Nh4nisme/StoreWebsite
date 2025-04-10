@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadTotalSale();
     loadRevenue();
     fetchTopProducts();
+    showTopEmployees();
 
 });
 
@@ -182,7 +183,7 @@ function displayTopProducts(products) {
     topProductsList.innerHTML = '';
     
     if (!products || products.length === 0) {
-        topProductsList.innerHTML = '<li class="list list-group-item">No product data available</li>';
+        topProductsList.innerHTML = '<li class="list-group-item">No product data available</li>';
         return;
     }
     
@@ -191,6 +192,45 @@ function displayTopProducts(products) {
         listItem.className = 'list-group-item';
         listItem.innerHTML = `${product.productName} <span class="float-end">${product.totalQuantity} sold</span>`;
         topProductsList.appendChild(listItem);
+    });
+}
+
+function showTopEmployees() {
+    try {
+        fetch(`http://localhost:3000/api/orders/top-employees`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(employee => {
+            displayTopEmployees(employee);
+        })
+        .catch(error => {
+            console.error('Error fetching top products:', error);
+            const topEmployeesList = document.getElementById('List-employees');
+            topEmployeesList.innerHTML = '<li class="list-group-item">Error loading product data</li>';
+        });
+    } catch (error) {
+        
+    }
+}
+
+function displayTopEmployees(employees) {
+    const topEmployeesList = document.getElementById('List-employees');
+    topEmployeesList.innerHTML = '';
+    
+    if (!employees || employees.length === 0) {
+        topEmployeesList.innerHTML = '<li class="list-group-item"></li>';
+        return;
+    }
+    
+    employees.forEach(employee => {
+        const listItem = document.createElement('li');
+        listItem.className = 'list-group-item';
+        listItem.innerHTML = `${employee.employeeName} <span class="float-end">${employee._id}</span>`;
+        topEmployeesList.appendChild(listItem);
     });
 }
 
