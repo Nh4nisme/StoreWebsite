@@ -87,7 +87,7 @@ function renderCategories(products) {
         categoryContainer.appendChild(btn);
     });
 }
-
+let invoiceItems = [];
 function renderOnboard(products) {
     const tableBody = document.getElementById('tableBodyOnboard');
     tableBody.innerHTML = '';
@@ -123,6 +123,8 @@ function renderOnboard(products) {
             addToInvoice(productId, name, price, quantity, total);
         });
     });
+
+
 }
 
 function renderOnboardCategory(products) {
@@ -286,5 +288,3 @@ function updateProductCount(numbers) {
         productNumber.textContent = numbers;
     }
 }
-
-
