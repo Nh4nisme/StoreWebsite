@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../lib/bootstrap.css">
+        <link rel="stylesheet" href="../css/innerframe.css">
+        <title>Online Store</title>
+    </head>
+    <body class="min-vh-100">
+        <div class="container-fluid py-4">
+            <div class="bg-white p-4 rounded" style="box-shadow: 0 0 5px rgba(0,0,0,0.1);">
+                <div class="d-flex align-items-center mb-3">
+                    <div>
+                        <span style="font-weight: bolder;">Find Accounts:</span>
+                        <div style="position: relative; display: inline-block;">
+                            <img src="../img/search.svg" alt="Search" style="position: absolute; top: 50%; left: 20px; transform: translateY(-50%); width: 16px; height: 16px;">
+                            <input type="text" id="searchAccountText" class="search-box ms-2" placeholder="Search" style="padding-left: 32px;">
+                        </div>
+                        <button class="general-btn" onclick="searchAccount()">Search Account</button>
+                        <button class="general-btn" data-bs-toggle="modal" data-bs-target="#modalAccount">Add Account</button>
+                    </div>
+                </div>
+                <table class="table align-middle">
+                    <thead>
+                        <tr class="table-header">
+                            <th scope="col"></th>
+                            <th scope="col">Employee ID</th>
+                            <th scope="col">Username</th>
+                            <th scope="col">Password</th>
+                            <th scope="col">Role</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modalAccount" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Add Account</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3 row">
+                                <label for="employeeId" class="col-4 col-form-label fw-bold">Employee ID:</label>
+                                <div class="col-8">
+                                    <input type="text" class="form-control" id="employeeId">
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="username" class="col-4 col-form-label fw-bold">Username:</label>
+                                <div class="col-8">
+                                    <input type="text" class="form-control" id="username">
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="password" class="col-4 col-form-label fw-bold">Password:</label>
+                                <div class="col-8">
+                                    <input type="password" class="form-control" id="password">
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="role" class="col-4 col-form-label fw-bold">Role:</label>
+                                <div class="col-8">
+                                    <select class="form-select" id="role">
+                                        <option value="cashier">Cashier</option>
+                                        <option value="store-manager">Store Manager</option>
+                                        <option value="sales-associate">Sales Associate</option>
+                                        <option value="operations-manager">Operations Manager</option>
+                                        <option value="inventory-coordinator">Inventory Coordinator</option>
+                                        <option value="administrator">Administrator</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" onclick="addAccount()">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modalAccountEdit" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit Account</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3 row">
+                                <label for="editEmployeeId" class="col-4 col-form-label fw-bold">Employee ID:</label>
+                                <div class="col-8">
+                                    <input type="text" class="form-control" id="editEmployeeId">
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="editUsername" class="col-4 col-form-label fw-bold">Username:</label>
+                                <div class="col-8">
+                                    <input type="text" class="form-control" id="editUsername">
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="editPassword" class="col-4 col-form-label fw-bold">Password:</label>
+                                <div class="col-8">
+                                    <input type="password" class="form-control" id="editPassword">
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="editRole" class="col-4 col-form-label fw-bold">Role:</label>
+                                <div class="col-8">
+                                    <select class="form-select" id="editRole">
+                                        <option value="cashier">Cashier</option>
+                                        <option value="store-manager">Store Manager</option>
+                                        <option value="sales-associate">Sales Associate</option>
+                                        <option value="operations-manager">Operations Manager</option>
+                                        <option value="inventory-coordinator">Inventory Coordinator</option>
+                                        <option value="administrator">Administrator</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="saveEditBtn">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="toastMessage" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body"></div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+
+        <script src="../lib/bootstrap.bundle.js"></script>
+        <script src="../js/accounts.js"></script>
+    </body>
+</html>
