@@ -7,7 +7,7 @@ function formatRole(role) {
 }
 
 function showToast(message) { //This function is used to display message at the bottom right of the screen
-    const toastElement = document.getElementById("toastMessageAccount");
+    const toastElement = document.getElementById("toastMessage");
     const toastBody = toastElement.querySelector(".toast-body");
     toastBody.textContent = message;
     const toast = new bootstrap.Toast(toastElement);
@@ -48,7 +48,7 @@ function loadAccounts() {
                     deleteAccount(accountId);
                 });
             });
-
+            
             updateEmployeeCount(accounts.length);
         });
 }
@@ -59,32 +59,12 @@ function addAccount() {
     const password = document.getElementById("password").value.trim();
     const role = document.getElementById("role").value.trim();
     if (!employeeId || !username || !password || !role) return alert("All fields are required!");
-
-    // First check if employee exists
-    fetch(`http://localhost:3000/api/employees/check/${employeeId}`)
-        .then(response => {
-            if (!response.ok) {
-                if (response.status === 404) {
-                    throw new Error("Employee ID does not exist. Please check the ID and try again.");
-                }
-                throw new Error("Error checking employee.");
-            }
-            return response.json();
-        })
-        .then(_data => {
-            return fetch("http://localhost:3000/api/accounts", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ employeeId, username, password, role }),
-            });
-        })
-        .then(response => {
-            if (!response.ok) {
-                return response.json().then(data => {
-                    throw new Error(data.message || "Failed to add account");
-                });
-            }
-
+    fetch("http://localhost:3000/api/accounts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ employeeId, username, password, role }),
+    }).then(response => {
+        if (response.ok) {
             document.getElementById("employeeId").value = "";
             document.getElementById("username").value = "";
             document.getElementById("password").value = "";
@@ -93,10 +73,10 @@ function addAccount() {
             modal.hide();
             loadAccounts();
             showToast("Account added successfully!");
-        })
-        .catch(error => {
-            alert(error.message);
-        });
+        } else {
+            alert("Failed to add account.");
+        }
+    });
 }
 
 function showEditModal(accountId) {
@@ -109,7 +89,7 @@ function showEditModal(accountId) {
             document.getElementById("editRole").value = account.role;
             const editModal = new bootstrap.Modal(document.getElementById("modalAccountEdit"));
             editModal.show();
-            document.getElementById("saveEditBtnAccount").onclick = () => saveEditedAccount(accountId);
+            document.getElementById("saveEditBtn").onclick = () => saveEditedAccount(accountId);
         });
 }
 
@@ -150,26 +130,26 @@ function deleteAccount(accountId) {
 function searchAccount() {
     const searchTerm = document.getElementById("searchAccountText").value.toLowerCase();
     const tableRows = document.querySelectorAll("#tableBody tr");
-
+    
     tableRows.forEach(row => {
         row.style.display = "";
     });
-
+    
     // If search term is empty, show all rows and exit
     if (searchTerm === "") {
         return;
     }
-
+    
     tableRows.forEach(row => {
         const employeeId = row.cells[1].textContent.toLowerCase();
         const username = row.cells[2].textContent.toLowerCase();
         const role = row.cells[4].textContent.toLowerCase();
-
-        const matchesSearch =
-            employeeId.includes(searchTerm) ||
-            username.includes(searchTerm) ||
+        
+        const matchesSearch = 
+            employeeId.includes(searchTerm) || 
+            username.includes(searchTerm) || 
             role.includes(searchTerm);
-
+        
         row.style.display = matchesSearch ? "" : "none";
     });
 }
@@ -179,4 +159,4 @@ function updateEmployeeCount(count) {
     if (employeeCountElement) {
         employeeCountElement.textContent = count;
     }
-};
+}
