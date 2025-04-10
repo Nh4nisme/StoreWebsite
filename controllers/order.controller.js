@@ -1,5 +1,44 @@
 const Order = require('../models/orders.model');
 
+// Tạo hóa đơn mới
+exports.createOrder = async (req, res) => {
+    try {
+        const {
+            invoiceCode,
+            createdAt,
+            employeeId,
+            employeeName,
+            items,
+            totalAmount,
+            paymentMethod,
+            customerPaid,
+            change
+        } = req.body;
+
+        if (!invoiceCode || !createdAt || !employeeId || !employeeName || !items || items.length === 0) {
+            return res.status(400).json({ message: 'Thiếu thông tin bắt buộc.' });
+        }
+
+        const newOrder = new Order({
+            invoiceCode,
+            createdAt,
+            employeeId,
+            employeeName,
+            items,
+            totalAmount,
+            paymentMethod,
+            customerPaid,
+            change
+        });
+
+        const savedOrder = await newOrder.save();
+        res.status(201).json({ message: 'Tạo hóa đơn thành công.', order: savedOrder });
+    } catch (err) {
+        console.error('Lỗi khi tạo hóa đơn:', err);
+        res.status(500).json({ message: 'Lỗi máy chủ.', error: err.message });
+    }
+};
+
 exports.getOrder = async (req, res) => {
     try {
         const orders = await Order.find();
@@ -48,6 +87,7 @@ exports.deleteOrder = async (req, res) => {
     }
 }
 
+// truy van doanh thu theo thang
 exports.getRevenueMonthly = async (req, res) => {
     try {
         const result = await Order.aggregate([
