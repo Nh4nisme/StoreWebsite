@@ -19,6 +19,14 @@ async function fetchAndRenderProducts() {
     }
 }
 
+function showToast1(message) { //This function is used to display message at the bottom right of the screen
+    const toastElement = document.getElementById("toastMessageProducts");
+    const toastBody = toastElement.querySelector(".toast-body");
+    toastBody.textContent = message;
+    const toast = new bootstrap.Toast(toastElement);
+    toast.show();
+}
+
 //Hien thi san pham
 function renderTable(products) {
     const tableBody = document.getElementById('tableBodyProducts');
@@ -55,7 +63,6 @@ function renderTable(products) {
 }
 
 //Hien thi danh muc
-
 function renderCategories(products) {
     const categoryContainer = document.getElementById('category');
     categoryContainer.innerHTML = '';
@@ -80,7 +87,6 @@ function renderCategories(products) {
         categoryContainer.appendChild(btn);
     });
 }
-// Hien thi danh muc Onboard
 
 function renderOnboard(products) {
     const tableBody = document.getElementById('tableBodyOnboard');
@@ -97,28 +103,8 @@ function renderOnboard(products) {
       <td class="d-flex align-items-center">
         <input type="number" class="form-control form-control-sm mx-2 quantity-input" data-id="${product._id}" value="1" min="1" style="width: 60px; text-align: center;">
       </td>
-    `;
-        tableBody.appendChild(row);
-    });
-}
-// Son them nut Add cho tat ca cac product de de xu ly hon
-function renderOnboard(products) {
-    const tableBody = document.getElementById('tableBodyOnboard');
-    tableBody.innerHTML = '';
-
-    products.forEach(product => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${product.productId}</td>
-            <td>${product.name}</td>
-            <td>${product.price}</td>
-            <td>${product.stock}</td>
-            <td>
-                <input type="number" class="form-control form-control-sm quantity-input" 
-                    data-id="${product._id}" value="1" min="1" style="width: 60px; text-align: center;">
-            </td>
-            <td>
-                <button class="btn btn-sm btn-primary add-to-invoice-btn" data-id="${product._id}">Add</button>
+      <td>
+                <button class="btn btn-sm btn-primary add-to-invoice-btn" style="border-radius: 10px" data-id="${product._id}">Add</button>
             </td>
         `;
         tableBody.appendChild(row);
@@ -128,14 +114,39 @@ function renderOnboard(products) {
     document.querySelectorAll('.add-to-invoice-btn').forEach(button => {
         button.addEventListener('click', event => {
             const row = event.target.closest('tr');
-            const productId = row.cells[0].textContent;
-            const name = row.cells[1].textContent;
-            const price = parseFloat(row.cells[2].textContent);
+            const productId = row.cells[1].textContent;
+            const name = row.cells[2].textContent;
+            const price = parseFloat(row.cells[3].textContent);
             const quantity = parseInt(row.querySelector('.quantity-input').value);
             const total = price * quantity;
 
             addToInvoice(productId, name, price, quantity, total);
         });
+    });
+}
+
+function renderOnboardCategory(products) {
+    const categoryContainer = document.getElementById('categoryOnboard');
+    categoryContainer.innerHTML = '';
+
+    const categorySet = new Set(products.map(p => p.category).filter(Boolean));
+
+    // Thêm nút "All"
+    const allBtn = document.createElement('button');
+    allBtn.textContent = 'All';
+    allBtn.className = 'category-btn';
+    allBtn.addEventListener('click', () => renderOnboard(allProducts));
+    categoryContainer.appendChild(allBtn);
+
+    categorySet.forEach(cat => {
+        const btn = document.createElement('button');
+        btn.textContent = cat;
+        btn.className = 'category-btn';
+        btn.addEventListener('click', () => {
+            const filtered = allProducts.filter(p => p.category === cat);
+            renderOnboard(filtered);
+        });
+        categoryContainer.appendChild(btn);
     });
 }
 
@@ -169,9 +180,9 @@ function addProduct() {
                 const modal = bootstrap.Modal.getInstance(document.getElementById("modalProducts"));
                 modal.hide();
                 fetchAndRenderProducts();
-                alert('add success!');
+                showToast1('Product added successfully!');
             } else {
-                alert("Failed to add account.");
+                showToast1('Failed to add product.');
             }
         });
 }
@@ -214,9 +225,9 @@ function saveEditedProduct(productId) {
             const editModal = bootstrap.Modal.getInstance(document.getElementById("modalProductsEdit"));
             editModal.hide();
             fetchAndRenderProducts();
-            alert('update success!');
+            showToast1('Product updated successfully!');
         } else {
-            alert("Failed to update product.");
+            showToast1("Failed to update product.");
         }
     });
 }
@@ -232,9 +243,9 @@ function deleteProducts(productId) {
         .then(response => {
             if (response.ok) {
                 fetchAndRenderProducts();
-                alert('Delete product successfully!');
+                showToast1('Product deleted successfully!');
             } else {
-                alert('fail to delete');
+                showToast1('Failed to delete product');
             }
         });
 }

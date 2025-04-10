@@ -1,6 +1,5 @@
 const Order = require('../models/orders.model');
 
-// Tạo hóa đơn mới
 exports.createOrder = async (req, res) => {
     try {
         const {
@@ -38,7 +37,6 @@ exports.createOrder = async (req, res) => {
         res.status(500).json({ message: 'Lỗi máy chủ.', error: err.message });
     }
 };
-
 
 exports.getOrder = async (req, res) => {
     try {
@@ -85,5 +83,48 @@ exports.deleteOrder = async (req, res) => {
     } catch (error) {
         console.log('error', error);
         res.status(500).json({ message: 'An error occurred while deleting the order.' })
+    }
+}
+
+exports.getRevenueMonthly = async (req, res) => {
+    try {
+        const result = await Order.aggregate([
+            {
+                $group: {
+                    _id: {
+                        year: { $year: "$createdAt" },
+                        month: { $month: "$createdAt" }
+                    },
+                    totalRevenue: { $sum: "$totalAmount" },
+                    totalInvoices: { $sum: 1 }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    month: {
+                        $concat: [
+                            { $toString: "$_id.year" },
+                            "-",
+                            {
+                                $cond: [
+                                    { $lt: ["$_id.month", 10] },
+                                    { $concat: ["0", { $toString: "$_id.month" }] },
+                                    { $toString: "$_id.month" }
+                                ]
+                            }
+                        ]
+                    },
+                    totalRevenue: 1,
+                    totalInvoices: 1
+                }
+            },
+            {
+                $sort: { month: 1 }
+            }
+        ]);
+        res.status(200).json(result);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
 }

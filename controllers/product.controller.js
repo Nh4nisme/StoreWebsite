@@ -8,7 +8,7 @@ exports.createProducts = async (req, res) => {
     if (!productId || !name || !category || !price || !stock || !supplier || !expirationDate) {
         return res.status(400).json({ message: 'All fields are required.' });
     }
-
+    
     try {
         const newProduct = new Product({
             productId,
@@ -88,9 +88,9 @@ exports.updateProducts = async (req, res) => {
 //Xoa san pham
 exports.deleteProducts = async (req, res) => {
     try {
-        const deletedProduct = await Product.findByIdAndDelete(req.params.id);
+        const deletedProduct = await Product.findByIdAndDelete(req.params.id);    
         if (!deletedProduct) {
-            return res.status(404).json({ message: 'Product not found.' });
+            return res.status(404).json({ message: 'Product not found.'});
         }
         res.status(200).json({ message: 'Product deleted successfully.' });
     } catch (error) {
