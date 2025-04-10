@@ -287,4 +287,8 @@ function updateProductCount(numbers) {
     }
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+    fetchTopProducts();
+});
+
 

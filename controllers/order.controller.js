@@ -130,3 +130,25 @@ exports.getRevenueMonthly = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 }
+
+exports.getTopProducts = async (req, res) => {
+    try {
+        const topProducts = await Order.aggregate([
+            { $unwind: "$items" },
+            {
+                $group: {
+                    _id: "$items.productId",
+                    productName: { $first: "$items.productName" },
+                    totalQuantity: { $sum: "$items.quantity" }
+                }
+            },
+            { $sort: { totalQuantity: -1 } },
+            { $limit: 3 }
+        ]);
+        
+        res.status(200).json(topProducts);
+    } catch (error) {
+        console.error('Error getting top products:', error);
+        res.status(500).json({ message: 'An error occurred while getting top products.' });
+    }
+};
